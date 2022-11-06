@@ -9,3 +9,4 @@ Resources
 - https://www.arduino.cc/reference/en/
 - https://www.arduino.cc/reference/en/libraries/
 - https://www.geeksforgeeks.org/python-tkinter-tutorial/
+- https://www.adafruit.com/product/155
