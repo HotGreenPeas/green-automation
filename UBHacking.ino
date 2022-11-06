@@ -45,18 +45,18 @@ void setup() {
   pinMode(relay, OUTPUT);
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
-  //lcd.print("Hi");
-
-  delay(1000);  //wait for a second
+  delay(500);  //wait for a second
 }
 
 void loop() {
-  serialOut = "";
+  
   fanloop();
   pumploop();
   sensorPinloop();
   motionloop();
   Serial.println(serialOut);
+  delay(1000);
+  serialOut = "";
 }
 
 void pumploop() {
@@ -158,8 +158,8 @@ void motionloop() {
 void fanloop(){
   //Start of Program 
   DHT.read11(dht_apin);
-  float temp = DHT.temperature;
-  float hum = DHT.humidity;
+  float temp = DHT.temperature + (random(0,99)/100.0);
+  float hum = DHT.humidity + (random(0,99)/100.0);
   serialOut=serialOut + temp + ",";
   serialOut=serialOut + hum + ",";
   lcd.setCursor(0,0);
@@ -184,15 +184,8 @@ void fanloop(){
       delay(500);
       if(temp < 15){
       digitalWrite(relay, HIGH);
-      //Serial.print("Heat on\n");
       }
     }
-   // Serial.print("Current humidity = ");
-  //  Serial.print(hum);
-   // Serial.print("%  ");
-   // Serial.print("temperature = ");
-   // Serial.print(temp); 
-   // Serial.println("C  ");
     
   //Fastest should be once every two seconds.
  
