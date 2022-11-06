@@ -3,6 +3,7 @@ import serial
 from tkinter import * 
 from tkinter.ttk import *
 
+
 window = Tk()
 window.title('Greenhouse Data')
 window.geometry("500x500")
@@ -62,11 +63,21 @@ def update():
         hum = data[1]
         moisture  = data[2]
         sunlight = data[3]
-        
+        if (int(moisture) < 100):
+            mois = "Water Tank is Close to Being Empty, Please Refill"
+        if (int(moisture) == 0):
+            mois= "Dry; Water Tank is Empty, Please Refill"
+        if ( 100 <= int(moisture) <= 400):
+            mois = "Dry"
+        if (400 < int(moisture) <= 700):
+            mois = "Medium"
+        if (700 < int(moisture)):
+            mois= "Wet"
+                                    
         fahrenheit = float(temp)
         fahrenheit = (fahrenheit * 9/5) + 32 
         temperature['text']= "Temperature: " + temp + " °C / " + str(round(fahrenheit,2)) + " °F"
-        moisture_level['text'] = "Moisture: " + moisture
+        moisture_level['text'] = "Moisture: " + mois
         sun['text'] = "Sunlight: " + sunlight + " photons"
         humidity_level['text'] = "Humidity: " + hum + " %"
     
