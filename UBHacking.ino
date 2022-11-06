@@ -24,6 +24,7 @@ const int motorPin2 = 8;  // Pin  2 of L293
 const int motionPin = 3;
 const int fan = 5;
 const int relay = 7;
+String serialOut;
 
 dht DHT;
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
@@ -33,7 +34,7 @@ Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   Serial.begin(9600);
-  myservo.attach(13);  //attachs the servo on pin 15 to servo object
+  myservo.attach(13);  //attachs the servo on pin 13 to servo object
   myservo.write(0);    //back to 0 degrees
   pinMode(motorPin1, OUTPUT);
   pinMode(motorPin2, OUTPUT);
@@ -50,14 +51,17 @@ void setup() {
 }
 
 void loop() {
-  sensorPinloop();
-  pumploop();
-  motionloop();
+  serialOut = "";
   fanloop();
+  pumploop();
+  sensorPinloop();
+  motionloop();
+  Serial.println(serialOut);
 }
 
 void pumploop() {
   int value = analogRead(WATER_LEVEL);  // read the analog value from sensor
+  serialOut=serialOut + value + ",";
   if (value < THRESHOLD) {
     digitalWrite(motorPin1, HIGH);
     digitalWrite(motorPin2, LOW);
@@ -74,8 +78,8 @@ void pumploop() {
     
     //Serial.print("The soil is WET (");
 
-    Serial.print(value);
-    Serial.println(")");
+   // Serial.print(value);
+    //Serial.println(")");
     digitalWrite(motorPin1, LOW);
     digitalWrite(motorPin2, LOW);
 
@@ -99,15 +103,17 @@ void sensorPinloop() {
     sum2 += sensorValue2;
     delay(5);
   }
-  Serial.print("sensor 1 :");
+ // Serial.print("sensor 1 :");
   int avg1 = (sum / 10);
   int avg2 = (sum2 / 10);
-  Serial.println(avg1);
-  Serial.print("sensor 2 :");
-  Serial.println(avg2);
+  serialOut=serialOut + avg1 + ",";
+  serialOut=serialOut + avg2 ;
+ // Serial.println(avg1);
+//  Serial.print("sensor 2 :");
+//  Serial.println(avg2);
   //delay(1000);
 
-  if (avg1 < avg2 + 100) {
+  if (avg1 < avg2+100) {
     myservo.write(0);  //write the i angle to the servo
     delay(15);         //delay 15ms
   } else {
@@ -154,6 +160,8 @@ void fanloop(){
   DHT.read11(dht_apin);
   float temp = DHT.temperature;
   float hum = DHT.humidity;
+  serialOut=serialOut + temp + ",";
+  serialOut=serialOut + hum + ",";
   lcd.setCursor(0,0);
   lcd.print("Temp:");
   lcd.setCursor(6,0);
@@ -176,15 +184,15 @@ void fanloop(){
       delay(500);
       if(temp < 15){
       digitalWrite(relay, HIGH);
-      Serial.print("Heat on\n");
+      //Serial.print("Heat on\n");
       }
     }
-    Serial.print("Current humidity = ");
-    Serial.print(hum);
-    Serial.print("%  ");
-    Serial.print("temperature = ");
-    Serial.print(temp); 
-    Serial.println("C  ");
+   // Serial.print("Current humidity = ");
+  //  Serial.print(hum);
+   // Serial.print("%  ");
+   // Serial.print("temperature = ");
+   // Serial.print(temp); 
+   // Serial.println("C  ");
     
   //Fastest should be once every two seconds.
  
