@@ -175,7 +175,7 @@ void fanloop(){
   lcd.setCursor(10,1);
   lcd.print("%");
     delay(1000);
-    if (temp > 23) {
+    if (temp > 24) {
       digitalWrite(fan,HIGH);
       digitalWrite(relay, LOW);
     }
