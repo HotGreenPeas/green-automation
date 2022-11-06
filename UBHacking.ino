@@ -9,7 +9,7 @@
 #endif
 
 #define WATER_LEVEL A0    // Arduino pin that connects to AOUT pin of moisture sensor
-#define THRESHOLD 230  // CHANGE YOUR THRESHOLD HERE
+#define THRESHOLD 100  // CHANGE YOUR THRESHOLD HERE
 
 #define PIXEL_PIN  2
 #define PIXEL_COUNT 8
@@ -113,7 +113,7 @@ void sensorPinloop() {
 //  Serial.println(avg2);
   //delay(1000);
 
-  if (avg1 < avg2+100) {
+  if (avg1 < avg2+200) {
     myservo.write(0);  //write the i angle to the servo
     delay(15);         //delay 15ms
   } else {
