@@ -4,7 +4,9 @@ int sensor = 8;
 
 int val = 0;
 void setup() {
- 
+  pinMode(led, OUTPUT);      // initalize LED as an output
+  pinMode(sensor, INPUT);    // initialize sensor as an input
+  Serial.begin(9600);
 
 }
 
